@@ -1,0 +1,137 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background: #f5f5f5;
+  transition: background 0.5s ease;
+}
+
+/* Tema */
+body[data-theme="light"] {
+  background: #f5f5f5;
+  color: #000;
+}
+body[data-theme="dark"] {
+  background: #000000;
+  color: #000;
+}
+
+/* Shapes */
+.pomodoro-box {
+  padding: 20px;
+  text-align: center;
+  width: 600px;
+  max-width: 95%;
+  transition: all 0.3s;
+}
+
+/* Variasi Shape */
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+}
+.rounded {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50px;
+}
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(0px);
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Mode button */
+.mode-selector button {
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 8px 15px;
+  margin: 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+.mode-selector button.active {
+  background: #000000;
+  color: #ffff;
+}
+
+/* Timer */
+.timer {
+  font-size: 80px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Controls */
+.controls {
+  display: flex; /* aktifkan flexbox */
+  justify-content: center; /* rata tengah horizontal */
+  align-items: center; /* rata tengah vertikal */
+  gap: 10px; /* jarak antar tombol */
+  margin-top: px; /* jarak ke timer di atasnya */
+}
+
+.controls button {
+  background: rgba(0, 0, 0, 0.1); /* tanpa kotak */
+  border-radius: 20px;
+  border: none; /* tanpa border */
+  cursor: pointer;
+  font-size: 0px; /* ukuran font untuk Start */
+  color: var(--text-color); /* ikut tema */
+  font-weight: bold;
+}
+
+#reset img,
+#settings img {
+  width: 28px; /* ukuran ikon */
+  height: 28px;
+}
+
+.goal {
+  font-weight: bold;
+  display: inlineblock;
+  margin-top: 40px;
+  font-size: 20px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 50px;
+  border-radius: 20px;
+  width: 320px;
+}
+.modal-content label {
+  display: block;
+  margin: 8px 0;
+}
+
+.pomodoro-box,
+.pomodoro-box * {
+  color: inherit; /* semua teks ikut warna parent */
+}
+
+.controls svg {
+  width: 50px;
+  height: 20px;
+  fill: currentColor; /* Warna icon ikut warna font */
+}
+
+#startStop {
+  font-size: 20px; /* ubah angka ini sesuai keinginan */
+  font-weight: none; /* opsional: biar lebih tegas */
+  padding: 10px px; /* opsional: spasi lebih luas */
+}
