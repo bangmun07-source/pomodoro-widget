@@ -1,200 +1,56 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root{
+  --stroke: rgba(255,255,255,.25);
+  --glass: rgba(22,22,22,.82);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; color:#fff; font-family:'Inter',sans-serif;
+  background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop');
+  background-size:cover; background-position:center; background-attachment:fixed;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white;
-  height: 100vh;
-  background-color: black;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background 0.3s ease;
-}
+/* Jangan blokir klik */
+.bg-dim{position:fixed; inset:0; background:rgba(0,0,0,.05); pointer-events:none}
 
-/* Header */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
+.topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px}
+.modes{display:flex; gap:8px}
+.pill{padding:8px 14px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.1); color:#fff; cursor:pointer; backdrop-filter: blur(10px)}
+.pill.active{background:#fff; color:#222}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:999px; background:rgba(255,255,255,.16); color:#fff; border:1px solid var(--stroke); cursor:pointer}
+
+.center{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding-top:48px}
+.time{font-size:clamp(64px,20vw,160px); line-height:.9; font-weight:700; color:#fff; text-shadow:0 5px 8px rgba(0,0,0,.45)}
+.bar{width:min(1080px,92vw); height:7px; background:rgba(255,255,255,.2); border-radius:999px; overflow:hidden}
+.bar-fill{height:100%; width:0; background:#fff; transition:width .2s ease}
+.controls{display:flex; gap:10px}
+.btn{border:none; border-radius:999px; padding:10px 18px; font-weight:70; cursor:pointer}
+.btn.primary{background:#fff; color:#222}
+.btn.ghost{background:rgba(255,255,255,.7); color:#222}
+.btn.line{background:transparent; color:#fff; border:1px solid var(--stroke)}
+.btn.small{padding:10px 18px; font-size:.9rem}
+.hint{opacity:.85; font-size:.8rem}
+
+/* Settings panel */
+.panel{position:fixed; top:0; right:-420px; width:min(420px,92vw); height:100vh; background:var(--glass); border-left:1px solid var(--stroke); backdrop-filter:blur(16px); color:#fff; padding:16px; transition:right .28s ease; overflow:auto}
+.panel.open{right:0}
+.panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px}
+.group{margin:16px 0}
+.group h3{font-size:.9rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; margin-bottom:8px}
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+label{display:flex; flex-direction:column; gap:6px; font-size:.92rem}
+input[type=number]{background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
+.select{width:100%; background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
+.preset-wrap{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.preset{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; border:1px solid var(--stroke); cursor:pointer}
+.select {
   width: 100%;
-  height: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 100;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-}
-
-.tabs button {
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  padding: 6px 14px;
-  color: white;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.tabs button.active,
-.tabs button:hover {
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.settings-trigger {
-  position: absolute;
-  right: 20px;
-  top: 18px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Timer */
-.timer-container {
-  text-align: center;
-  margin-top: 80px;
-}
-
-.timer {
-  font-size: clamp(3rem, 10vw, 7rem);
-  font-weight: 300;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.buttons button {
-  padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.buttons button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Progress Bar */
-.progress-bar {
-  width: 80%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 20px auto;
+  background: rgba(255,255,255,.1);
+  border: 1px solid var(--stroke);
+  color: #000000; /* ← WARNA TEKS DROPDOWN DI SINI */
   border-radius: 10px;
-  overflow: hidden;
+  padding: 10px;
 }
 
-#progress {
-  width: 0%;
-  height: 100%;
-  background: white;
-  transition: width 0.2s ease;
-}
 
-/* Settings Panel */
-.settings-panel {
-  position: fixed;
-  top: 0;
-  right: -350px;
-  width: 320px;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(12px);
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-  transition: right 0.3s ease;
-  padding: 20px;
-  z-index: 200;
-  overflow-y: auto;
-}
-
-.settings-panel.open {
-  right: 0;
-}
-
-.settings-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.close-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.setting-group {
-  margin-top: 20px;
-}
-
-.setting-group h3 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.setting-group input[type="number"],
-.setting-group input[type="file"] {
-  margin-top: 6px;
-  padding: 6px;
-  width: 100%;
-  border: none;
-  border-radius: 6px;
-}
-
-.restore-btn {
-  margin-top: 10px;
-  padding: 6px 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.25);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.restore-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .tabs button {
-    font-size: 12px;
-    padding: 4px 10px;
-  }
-
-  .settings-trigger {
-    right: 10px;
-    font-size: 22px;
-  }
-
-  .settings-panel {
-    width: 80%;
-  }
-}
+@media (max-width:740px){ .grid-3{grid-template-columns:1fr} }
