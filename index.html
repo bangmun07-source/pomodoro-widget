@@ -2,32 +2,33 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pomodoro – Minimal</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- 10 Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Nunito:wght@400;700&family=Merriweather:wght@400;700&family=Raleway:wght@400;700&family=Oswald:wght@400;700&family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts (10 families) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Poppins:wght@400;700&family=Nunito:wght@400;800&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Rubik:wght@400;700&family=Raleway:wght@400;800&family=Work+Sans:wght@400;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg-dim"></div>
+  <div class="bg-dim" aria-hidden="true"></div>
 
-  <!-- Top bar -->
+  <!-- TOPBAR -->
   <header class="topbar">
     <div class="modes">
       <button id="btn-mode-pomodoro" class="pill active">Pomodoro</button>
       <button id="btn-mode-short" class="pill">Short break</button>
       <button id="btn-mode-long" class="pill">Long break</button>
     </div>
+
     <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Open settings">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.58.25 1.24.14 1.73-.26l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.4.49-.51 1.15-.26 1.73.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1Z"/>
       </svg>
     </button>
   </header>
 
-  <!-- Main -->
+  <!-- MAIN -->
   <main class="center">
     <h1 id="time" class="time">25:00</h1>
     <div class="bar"><div id="bar-fill" class="bar-fill"></div></div>
@@ -39,10 +40,10 @@
     <p class="hint">Space: Start/Pause • R: Reset • S: Skip</p>
   </main>
 
-  <!-- Settings Drawer -->
-  <aside id="panel" class="panel">
+  <!-- SETTINGS -->
+  <aside id="panel" class="panel" aria-labelledby="settings-title">
     <div class="panel-head">
-      <h2>Settings</h2>
+      <h2 id="settings-title">Settings</h2>
       <button id="btn-close" class="icon-btn" aria-label="Close settings">✕</button>
     </div>
 
@@ -56,40 +57,52 @@
     </section>
 
     <section class="group">
+      <h3>Behavior</h3>
+      <label class="row"><input id="in-autostart-breaks" type="checkbox"> Auto-start breaks</label>
+      <label class="row"><input id="in-autostart-focus" type="checkbox"> Auto-start focus</label>
+    </section>
+
+    <section class="group">
+      <h3>Sounds</h3>
+      <label class="row"><input id="in-sound-tick" type="checkbox" checked> Tick every second</label>
+      <label class="row"><input id="in-sound-chime" type="checkbox" checked> End chime</label>
+    </section>
+
+    <section class="group">
       <h3>Font family</h3>
       <select id="in-font" class="select">
-        <option value="'Inter', sans-serif" selected>Inter</option>
-        <option value="'Poppins', sans-serif">Poppins</option>
-        <option value="'Roboto', sans-serif">Roboto</option>
-        <option value="'Lato', sans-serif">Lato</option>
-        <option value="'Montserrat', sans-serif">Montserrat</option>
-        <option value="'Nunito', sans-serif">Nunito</option>
-        <option value="'Merriweather', serif">Merriweather</option>
-        <option value="'Raleway', sans-serif">Raleway</option>
-        <option value="'Oswald', sans-serif">Oswald</option>
-        <option value="'Work Sans', sans-serif">Work Sans</option>
+        <option value="'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">Inter (Default)</option>
+        <option value="'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">Poppins</option>
+        <option value="'Nunito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">Nunito</option>
+        <option value="'Merriweather', Georgia, serif">Merriweather</option>
+        <option value="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace">JetBrains Mono</option>
+        <option value="'Roboto', system-ui, -apple-system, Segoe UI, Arial, sans-serif">Roboto</option>
+        <option value="'Lato', system-ui, -apple-system, Segoe UI, Arial, sans-serif">Lato</option>
+        <option value="'Rubik', system-ui, -apple-system, Segoe UI, Arial, sans-serif">Rubik</option>
+        <option value="'Raleway', system-ui, -apple-system, Segoe UI, Arial, sans-serif">Raleway</option>
+        <option value="'Work Sans', system-ui, -apple-system, Segoe UI, Arial, sans-serif">Work Sans</option>
       </select>
     </section>
 
     <section class="group">
       <h3>Background</h3>
       <div id="preset-wrap" class="preset-wrap">
-        <!-- 5 preset siap pakai (unik, tanpa duplikat) -->
-        <img class="preset" alt="Mountains" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Ocean" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="City Night" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Canyon" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Forest Mist" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920&auto=format&fit=crop">
+        <!-- 5 preset Unsplash -->
+
+        <img class="preset" alt="Mountains" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop">
+        <img class="preset" alt="Ocean"     src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop">
+        <img class="preset" alt="City Night" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop">
+        <img class="preset" alt="Canyon"     src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop">
       </div>
       <label class="upload">
         <input id="in-upload" type="file" accept="image/*" hidden>
         <span class="btn line">Upload your own</span>
       </label>
-      <button id="btn-restore" class="btn line small">Restore default</button>
+      <button id="btn-restore" class="btn line small">Restore defaults</button>
       <p class="note">Preferences saved locally in browser.</p>
     </section>
   </aside>
 
-  <script src="app.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
