@@ -1,107 +1,163 @@
-const timeDisplay = document.getElementById("time");
-const progressBar = document.getElementById("progress");
-const startBtn = document.getElementById("start");
-const resetBtn = document.getElementById("reset");
-const skipBtn = document.getElementById("skip");
-const settingsPanel = document.getElementById("settingsPanel");
-const openSettings = document.getElementById("openSettings");
-const closeSettings = document.getElementById("closeSettings");
-const bgUpload = document.getElementById("bgUpload");
-const restoreDefault = document.getElementById("restoreDefault");
+// ---------- Helpers ----------
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+const fmt = (t) => {
+  const m = String(Math.floor(t/60)).padStart(2,'0');
+  const s = String(Math.floor(t%60)).padStart(2,'0');
+  return `${m}:${s}`;
+};
 
-let focusDuration = 25;
-let shortBreak = 5;
-let longBreak = 15;
-let timeLeft = focusDuration * 60;
-let timer = null;
-let isRunning = false;
+// ---------- Elements ----------
+const timeEl   = $('#time');
+const barFill  = $('#bar-fill');
+const btnStart = $('#btn-start');
+const btnReset = $('#btn-reset');
+const btnSkip  = $('#btn-skip');
+const btnSettings = $('#btn-settings');
+const btnClose    = $('#btn-close');
+const panel = $('#panel');
 
-// Load background from localStorage
-const savedBg = localStorage.getItem("backgroundImage");
-if (savedBg) {
-  document.body.style.backgroundImage = `url(${savedBg})`;
+const btnModeP = $('#mode-pomo');
+const btnModeS = $('#mode-short');
+const btnModeL = $('#mode-long');
+
+const inPomo  = $('#in-pomo');
+const inShort = $('#in-short');
+const inLong  = $('#in-long');
+const inFont  = $('#in-font');
+
+const inUpload   = $('#in-upload');
+const presetWrap = $('#preset-wrap');
+const btnRestore = $('#btn-restore');
+
+// ---------- State ----------
+const durations = { pomodoro: 25, short: 5, long: 15 };
+let mode = 'pomodoro';
+let remaining = durations[mode] * 60;
+let running = false;
+
+// RAF-based timer
+let endTimeMs = null; // timestamp (ms) when the period ends
+let raf = null;
+
+function startTimer() {
+  if (running) return;
+  running = true;
+  endTimeMs = performance.now() + remaining * 1000;
+  btnStart.textContent = 'Pause';
+  tick(); // kick
 }
 
-// Open settings panel
-openSettings.addEventListener("click", () => {
-  settingsPanel.classList.add("open");
-});
+function pauseTimer() {
+  if (!running) return;
+  running = false;
+  cancelAnimationFrame(raf);
+  remaining = Math.max(0, (endTimeMs - performance.now()) / 1000);
+  btnStart.textContent = 'Start';
+  render();
+}
 
-// Close settings panel
-closeSettings.addEventListener("click", () => {
-  settingsPanel.classList.remove("open");
-});
+function resetTimer() {
+  running = false;
+  cancelAnimationFrame(raf);
+  remaining = durations[mode] * 60;
+  btnStart.textContent = 'Start';
+  render();
+}
 
-// Upload and save background
-bgUpload.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = reader.result;
-      document.body.style.backgroundImage = `url(${base64})`;
-      localStorage.setItem("backgroundImage", base64);
-    };
-    reader.readAsDataURL(file);
+function skipTimer() {
+  running = false;
+  cancelAnimationFrame(raf);
+  remaining = 0;
+  render();
+}
+
+// RAF loop
+function tick(now = performance.now()) {
+  if (!running) return;
+  const left = (endTimeMs - now) / 1000;
+  remaining = Math.max(0, left);
+  render();
+
+  if (remaining <= 0) {
+    running = false;
+    btnStart.textContent = 'Start';
+    // (opsional) auto switch ke break/focus
+    return;
   }
+  raf = requestAnimationFrame(tick);
+}
+
+// ---------- UI ----------
+function render() {
+  timeEl.textContent = fmt(remaining);
+  const total = durations[mode] * 60;
+  const progress = Math.max(0, Math.min(1, 1 - remaining/total));
+  barFill.style.width = `${progress*100}%`;
+
+  [btnModeP, btnModeS, btnModeL].forEach(b=>b.classList.remove('active'));
+  ({pomodoro:btnModeP, short:btnModeS, long:btnModeL}[mode]).classList.add('active');
+}
+
+function setMode(next) {
+  mode = next;
+  running = false;
+  cancelAnimationFrame(raf);
+  remaining = durations[mode] * 60;
+  btnStart.textContent = 'Start';
+  render();
+}
+
+// ---------- Events ----------
+btnStart.addEventListener('click', () => running ? pauseTimer() : startTimer());
+btnReset.addEventListener('click', resetTimer);
+btnSkip .addEventListener('click', skipTimer);
+
+btnModeP.addEventListener('click', () => setMode('pomodoro'));
+btnModeS.addEventListener('click', () => setMode('short'));
+btnModeL.addEventListener('click', () => setMode('long'));
+
+btnSettings.addEventListener('click', () => panel.classList.add('open'));
+btnClose.addEventListener('click', () => panel.classList.remove('open'));
+
+[inPomo, inShort, inLong].forEach(input=>{
+  input.addEventListener('input', ()=>{
+    durations.pomodoro = clamp(parseInt(inPomo.value||'0'),1,180);
+    durations.short    = clamp(parseInt(inShort.value||'0'),1,60);
+    durations.long     = clamp(parseInt(inLong.value||'0'),1,60);
+    remaining = durations[mode]*60;
+    render();
+  });
+});
+
+inFont.addEventListener('change', ()=>{ document.body.style.fontFamily = inFont.value; });
+
+// Background presets
+presetWrap.querySelectorAll('.preset').forEach(img=>{
+  img.addEventListener('click', ()=>{ document.body.style.backgroundImage = `url(${img.src})`; });
+});
+
+// Upload custom background
+inUpload.addEventListener('change', (e)=>{
+  const file = e.target.files?.[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{ document.body.style.backgroundImage = `url(${reader.result})`; };
+  reader.readAsDataURL(file);
 });
 
 // Restore default background
-restoreDefault.addEventListener("click", () => {
-  document.body.style.backgroundImage = "none";
-  localStorage.removeItem("backgroundImage");
+btnRestore.addEventListener('click', ()=>{
+  document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop')";
 });
 
-// Start / Pause timer
-startBtn.addEventListener("click", () => {
-  if (!isRunning) {
-    isRunning = true;
-    startBtn.textContent = "Pause";
-    timer = setInterval(updateTimer, 1000);
-  } else {
-    isRunning = false;
-    startBtn.textContent = "Start";
-    clearInterval(timer);
-  }
+// Keyboard shortcuts
+window.addEventListener('keydown', (e)=>{
+  if (['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
+  if (e.code === 'Space'){ e.preventDefault(); running ? pauseTimer() : startTimer(); }
+  if (e.key.toLowerCase() === 'r'){ e.preventDefault(); resetTimer(); }
+  if (e.key.toLowerCase() === 's'){ e.preventDefault(); skipTimer(); }
 });
 
-// Reset timer
-resetBtn.addEventListener("click", () => {
-  clearInterval(timer);
-  isRunning = false;
-  startBtn.textContent = "Start";
-  timeLeft = focusDuration * 60;
-  updateDisplay();
-});
-
-// Skip timer
-skipBtn.addEventListener("click", () => {
-  clearInterval(timer);
-  isRunning = false;
-  startBtn.textContent = "Start";
-  timeLeft = shortBreak * 60;
-  updateDisplay();
-});
-
-// Update timer display
-function updateTimer() {
-  if (timeLeft > 0) {
-    timeLeft--;
-    updateDisplay();
-  } else {
-    clearInterval(timer);
-    isRunning = false;
-    startBtn.textContent = "Start";
-  }
-}
-
-// Update display and progress bar
-function updateDisplay() {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  timeDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  const progress = ((focusDuration * 60 - timeLeft) / (focusDuration * 60)) * 100;
-  progressBar.style.width = `${progress}%`;
-}
-
-updateDisplay();
+// First paint
+render();
