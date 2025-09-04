@@ -2,25 +2,29 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pomodoro – Minimal</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 
   <!-- 10 Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Nunito:wght@400;700&family=Merriweather:wght@400;700&family=Raleway:wght@400;700&family=Oswald:wght@400;700&family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Dim background -->
   <div class="bg-dim"></div>
 
   <!-- Top bar -->
   <header class="topbar">
     <div class="modes">
-      <button id="mode-pomo" class="pill active">Pomodoro</button>
-      <button id="mode-short" class="pill">Short break</button>
-      <button id="mode-long" class="pill">Long break</button>
+      <button id="btn-mode-pomodoro" class="pill active">Pomodoro</button>
+      <button id="btn-mode-short" class="pill">Short break</button>
+      <button id="btn-mode-long" class="pill">Long break</button>
     </div>
-    <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Open settings">⚙</button>
+    <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Open settings">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.58.25 1.24.14 1.73-.26l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.4.49-.51 1.15-.26 1.73.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1Z"/>
+      </svg>
+    </button>
   </header>
 
   <!-- Main -->
@@ -30,24 +34,24 @@
     <div class="controls">
       <button id="btn-start" class="btn primary">Start</button>
       <button id="btn-reset" class="btn ghost">Reset</button>
-      <button id="btn-skip"  class="btn ghost">Skip</button>
+      <button id="btn-skip" class="btn ghost">Skip</button>
     </div>
     <p class="hint">Space: Start/Pause • R: Reset • S: Skip</p>
   </main>
 
-  <!-- Settings -->
+  <!-- Settings Drawer -->
   <aside id="panel" class="panel">
     <div class="panel-head">
       <h2>Settings</h2>
-      <button id="btn-close" class="icon-btn" aria-label="Close">✕</button>
+      <button id="btn-close" class="icon-btn" aria-label="Close settings">✕</button>
     </div>
 
     <section class="group">
       <h3>Durations (minutes)</h3>
       <div class="grid-3">
-        <label>Focus <input id="in-pomo"  type="number" min="1" max="180" value="25"></label>
-        <label>Short <input id="in-short" type="number" min="1" max="60"  value="5"></label>
-        <label>Long  <input id="in-long"  type="number" min="1" max="60"  value="15"></label>
+        <label>Focus <input id="in-duration-pomo" type="number" min="1" max="180" value="25"></label>
+        <label>Short break <input id="in-duration-short" type="number" min="1" max="60" value="5"></label>
+        <label>Long break <input id="in-duration-long" type="number" min="1" max="60" value="15"></label>
       </div>
     </section>
 
@@ -70,22 +74,22 @@
     <section class="group">
       <h3>Background</h3>
       <div id="preset-wrap" class="preset-wrap">
-        <!-- 5 Unsplash siap pakai -->
+        <!-- 5 preset siap pakai (unik, tanpa duplikat) -->
         <img class="preset" alt="Mountains" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Ocean"     src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="City Night"src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Canyon"    src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop">
-        <img class="preset" alt="Dunes"     src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Ocean" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="City Night" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Canyon" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Forest Mist" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920&auto=format&fit=crop">
       </div>
       <label class="upload">
         <input id="in-upload" type="file" accept="image/*" hidden>
         <span class="btn line">Upload your own</span>
       </label>
       <button id="btn-restore" class="btn line small">Restore default</button>
+      <p class="note">Preferences saved locally in browser.</p>
     </section>
   </aside>
 
-  <script src="script.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
-
