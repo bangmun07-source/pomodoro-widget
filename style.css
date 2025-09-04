@@ -1,56 +1,58 @@
 :root{
-  --stroke: rgba(255,255,255,.25);
+  --bg-dim: rgba(0,0,0,.35);
   --glass: rgba(22,22,22,.82);
+  --stroke: rgba(255,255,255,.25);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0; color:#fff; font-family:'Inter',sans-serif;
   background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop');
-  background-size:cover; background-position:center; background-attachment:fixed;
+  background-position:center; background-size:cover; background-attachment:fixed;
 }
+.bg-dim{position:fixed; inset:0; background:var(--bg-dim); pointer-events:none}
 
-/* Jangan blokir klik */
-.bg-dim{position:fixed; inset:0; background:rgba(0,0,0,.05); pointer-events:none}
-
+/* Top bar */
 .topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px}
 .modes{display:flex; gap:8px}
-.pill{padding:8px 14px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.1); color:#fff; cursor:pointer; backdrop-filter: blur(10px)}
-.pill.active{background:#fff; color:#222}
-.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:999px; background:rgba(255,255,255,.16); color:#fff; border:1px solid var(--stroke); cursor:pointer}
+.pill{padding:8px 14px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.18); color:#fff; cursor:pointer; backdrop-filter: blur(10px); transition:.25s}
+.pill:hover{background:rgba(255,255,255,.28)}
+.pill.active{background:#fff; color:#222; border-color:rgba(255,255,255,.8); box-shadow:0 4px 18px rgba(0,0,0,.15)}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:999px; background:rgba(255,255,255,.18); border:1px solid var(--stroke); color:#fff; cursor:pointer; backdrop-filter: blur(10px);}
+.icon-btn:hover{background:rgba(255,255,255,.28)}
 
-.center{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding-top:48px}
-.time{font-size:clamp(64px,20vw,160px); line-height:.9; font-weight:700; color:#fff; text-shadow:0 5px 8px rgba(0,0,0,.45)}
-.bar{width:min(1080px,92vw); height:7px; background:rgba(255,255,255,.2); border-radius:999px; overflow:hidden}
-.bar-fill{height:100%; width:0; background:#fff; transition:width .2s ease}
+/* Center */
+.center{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:80px 16px 24px}
+.time{font-size:clamp(64px,20vw,160px); line-height:.9; font-weight:700; color:#fff; text-shadow:0 6px 35px rgba(0,0,0,.45)}
+.bar{width:min(1080px,92vw); height:12px; background:rgba(255,255,255,.22); border-radius:999px; overflow:hidden}
+.bar-fill{height:100%; width:0; background:rgba(255,255,255,.95);}
 .controls{display:flex; gap:10px}
-.btn{border:none; border-radius:999px; padding:10px 18px; font-weight:70; cursor:pointer}
+.btn{border:none; border-radius:999px; padding:10px 18px; font-weight:700; cursor:pointer}
 .btn.primary{background:#fff; color:#222}
-.btn.ghost{background:rgba(255,255,255,.7); color:#222}
+.btn.ghost{background:rgba(255,255,255,.75); color:#222}
 .btn.line{background:transparent; color:#fff; border:1px solid var(--stroke)}
-.btn.small{padding:10px 18px; font-size:.9rem}
+.btn.small{padding:6px 10px; font-size:.9rem}
 .hint{opacity:.85; font-size:.8rem}
 
-/* Settings panel */
-.panel{position:fixed; top:0; right:-420px; width:min(420px,92vw); height:100vh; background:var(--glass); border-left:1px solid var(--stroke); backdrop-filter:blur(16px); color:#fff; padding:16px; transition:right .28s ease; overflow:auto}
+/* Panel */
+.panel{position:fixed; top:0; right:-420px; width:min(420px,92vw); height:100vh; background:var(--glass); border-left:1px solid var(--stroke); backdrop-filter: blur(16px); color:#fff; padding:16px 16px 32px; transition:right .28s ease; overflow:auto;}
 .panel.open{right:0}
-.panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px}
+.panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
 .group{margin:16px 0}
-.group h3{font-size:.9rem; text-transform:uppercase; letter-spacing:.06em; opacity:.75; margin-bottom:8px}
+.group h3{font-size:.9rem; letter-spacing:.06em; text-transform:uppercase; opacity:.75; margin-bottom:8px}
 .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
 label{display:flex; flex-direction:column; gap:6px; font-size:.92rem}
 input[type=number]{background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
+.row{display:flex; gap:10px; align-items:center}
 .select{width:100%; background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
 .preset-wrap{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-.preset{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; border:1px solid var(--stroke); cursor:pointer}
-.select {
-  width: 100%;
-  background: rgba(255,255,255,.1);
-  border: 1px solid var(--stroke);
-  color: #000000; /* ← WARNA TEKS DROPDOWN DI SINI */
-  border-radius: 10px;
-  padding: 10px;
+.preset{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:12px; border:1px solid var(--stroke); cursor:pointer}
+.upload{display:block; margin:10px 0}
+.note{opacity:.7; font-size:.8rem}
+
+/* Pusatkan tombol restore jika diinginkan */
+#btn-restore{display:block; margin:12px auto; border-radius:12px}
+
+@media (max-width:740px){
+  .grid-3{grid-template-columns:1fr}
 }
-
-
-@media (max-width:740px){ .grid-3{grid-template-columns:1fr} }
