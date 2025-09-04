@@ -1,76 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pomodoro Timer</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pomodoro – Minimal</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- 10 Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Nunito:wght@400;700&family=Merriweather:wght@400;700&family=Raleway:wght@400;700&family=Oswald:wght@400;700&family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Header -->
-    <header class="topbar">
-      <div class="tabs">
-        <button id="tab-focus" class="active">Pomodoro</button>
-        <button id="tab-short">Short Break</button>
-        <button id="tab-long">Long Break</button>
-      </div>
-      <button id="openSettings" class="settings-trigger">⚙️</button>
-    </header>
+  <!-- Dim background -->
+  <div class="bg-dim"></div>
 
-    <!-- Timer -->
-    <div class="timer-container">
-      <h1 id="time" class="timer">25:00</h1>
-      <div class="buttons">
-        <button id="start">Start</button>
-        <button id="reset">Reset</button>
-        <button id="skip">Skip</button>
-      </div>
-      <div class="progress-bar">
-        <div id="progress"></div>
-      </div>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="modes">
+      <button id="mode-pomo" class="pill active">Pomodoro</button>
+      <button id="mode-short" class="pill">Short break</button>
+      <button id="mode-long" class="pill">Long break</button>
+    </div>
+    <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Open settings">⚙</button>
+  </header>
+
+  <!-- Main -->
+  <main class="center">
+    <h1 id="time" class="time">25:00</h1>
+    <div class="bar"><div id="bar-fill" class="bar-fill"></div></div>
+    <div class="controls">
+      <button id="btn-start" class="btn primary">Start</button>
+      <button id="btn-reset" class="btn ghost">Reset</button>
+      <button id="btn-skip"  class="btn ghost">Skip</button>
+    </div>
+    <p class="hint">Space: Start/Pause • R: Reset • S: Skip</p>
+  </main>
+
+  <!-- Settings -->
+  <aside id="panel" class="panel">
+    <div class="panel-head">
+      <h2>Settings</h2>
+      <button id="btn-close" class="icon-btn" aria-label="Close">✕</button>
     </div>
 
-    <!-- Settings Panel -->
-    <div id="settingsPanel" class="settings-panel">
-      <div class="settings-header">
-        <h2>Settings</h2>
-        <button id="closeSettings" class="close-btn">✕</button>
+    <section class="group">
+      <h3>Durations (minutes)</h3>
+      <div class="grid-3">
+        <label>Focus <input id="in-pomo"  type="number" min="1" max="180" value="25"></label>
+        <label>Short <input id="in-short" type="number" min="1" max="60"  value="5"></label>
+        <label>Long  <input id="in-long"  type="number" min="1" max="60"  value="15"></label>
       </div>
+    </section>
 
-      <div class="settings-content">
-        <!-- Durations -->
-        <div class="setting-group">
-          <h3>Durations (minutes)</h3>
-          <label>Focus: <input type="number" id="focusDuration" value="25" /></label>
-          <label>Short Break: <input type="number" id="shortDuration" value="5" /></label>
-          <label>Long Break: <input type="number" id="longDuration" value="15" /></label>
-        </div>
+    <section class="group">
+      <h3>Font family</h3>
+      <select id="in-font" class="select">
+        <option value="'Inter', sans-serif" selected>Inter</option>
+        <option value="'Poppins', sans-serif">Poppins</option>
+        <option value="'Roboto', sans-serif">Roboto</option>
+        <option value="'Lato', sans-serif">Lato</option>
+        <option value="'Montserrat', sans-serif">Montserrat</option>
+        <option value="'Nunito', sans-serif">Nunito</option>
+        <option value="'Merriweather', serif">Merriweather</option>
+        <option value="'Raleway', sans-serif">Raleway</option>
+        <option value="'Oswald', sans-serif">Oswald</option>
+        <option value="'Work Sans', sans-serif">Work Sans</option>
+      </select>
+    </section>
 
-        <!-- Behavior -->
-        <div class="setting-group">
-          <h3>Behavior</h3>
-          <label><input type="checkbox" id="autoStartBreak" /> Auto-start breaks</label>
-          <label><input type="checkbox" id="autoStartFocus" /> Auto-start focus</label>
-        </div>
-
-        <!-- Sounds -->
-        <div class="setting-group">
-          <h3>Sounds</h3>
-          <label><input type="checkbox" id="tickSound" checked /> Tick every second</label>
-          <label><input type="checkbox" id="endChime" checked /> End chime</label>
-        </div>
-
-        <!-- Background -->
-        <div class="setting-group">
-          <h3>Background</h3>
-          <input type="file" id="bgUpload" accept="image/*" />
-          <button id="restoreDefault" class="restore-btn">Restore Default</button>
-        </div>
+    <section class="group">
+      <h3>Background</h3>
+      <div id="preset-wrap" class="preset-wrap">
+        <!-- 5 Unsplash siap pakai -->
+        <img class="preset" alt="Mountains" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Ocean"     src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="City Night"src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Canyon"    src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop">
+        <img class="preset" alt="Dunes"     src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1920&auto=format&fit=crop">
       </div>
-    </div>
-  </div>
-  
-  <script src="script.js"></script>
+      <label class="upload">
+        <input id="in-upload" type="file" accept="image/*" hidden>
+        <span class="btn line">Upload your own</span>
+      </label>
+      <button id="btn-restore" class="btn line small">Restore default</button>
+    </section>
+  </aside>
+
+  <script src="app.js"></script>
 </body>
 </html>
