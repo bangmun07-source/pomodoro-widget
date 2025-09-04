@@ -7,81 +7,70 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="mode-tabs">
-        <button class="pill active" id="tab-focus" onclick="setMode('focus')">Pomodoro</button>
-        <button class="pill" id="tab-short" onclick="setMode('short')">Short break</button>
-        <button class="pill" id="tab-long" onclick="setMode('long')">Long break</button>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="topbar">
+      <div class="tabs">
+        <button id="tab-focus" class="active">Pomodoro</button>
+        <button id="tab-short">Short Break</button>
+        <button id="tab-long">Long Break</button>
       </div>
-      <div class="settings-trigger">
-        <button class="icon-btn" id="openSettings" title="Settings">⚙️</button>
+      <button id="openSettings" class="settings-trigger">⚙️</button>
+    </header>
+
+    <!-- Timer -->
+    <div class="timer-container">
+      <h1 id="time" class="timer">25:00</h1>
+      <div class="buttons">
+        <button id="start">Start</button>
+        <button id="reset">Reset</button>
+        <button id="skip">Skip</button>
+      </div>
+      <div class="progress-bar">
+        <div id="progress"></div>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settingsPanel" class="settings-panel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="closeSettings" class="close-btn">✕</button>
+      </div>
+
+      <div class="settings-content">
+        <!-- Durations -->
+        <div class="setting-group">
+          <h3>Durations (minutes)</h3>
+          <label>Focus: <input type="number" id="focusDuration" value="25" /></label>
+          <label>Short Break: <input type="number" id="shortDuration" value="5" /></label>
+          <label>Long Break: <input type="number" id="longDuration" value="15" /></label>
+        </div>
+
+        <!-- Behavior -->
+        <div class="setting-group">
+          <h3>Behavior</h3>
+          <label><input type="checkbox" id="autoStartBreak" /> Auto-start breaks</label>
+          <label><input type="checkbox" id="autoStartFocus" /> Auto-start focus</label>
+        </div>
+
+        <!-- Sounds -->
+        <div class="setting-group">
+          <h3>Sounds</h3>
+          <label><input type="checkbox" id="tickSound" checked /> Tick every second</label>
+          <label><input type="checkbox" id="endChime" checked /> End chime</label>
+        </div>
+
+        <!-- Background -->
+        <div class="setting-group">
+          <h3>Background</h3>
+          <input type="file" id="bgUpload" accept="image/*" />
+          <button id="restoreDefault" class="restore-btn">Restore Default</button>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Timer -->
-  <main class="stage">
-    <div class="stage-inner">
-      <div id="clock" class="clock">25:00</div>
-      <div class="progress-wrap">
-        <div id="progress" class="progress-bar"></div>
-      </div>
-      <div class="actions">
-        <button class="btn" id="btnStart">Start</button>
-        <button class="btn" id="btnReset">Reset</button>
-        <button class="btn" id="btnSkip">Skip</button>
-      </div>
-    </div>
-  </main>
-
-  <!-- Settings Panel -->
-  <aside id="panel" class="settings-panel">
-    <div class="settings-header">
-      <div class="settings-title">Settings</div>
-      <button class="close-btn" id="closeSettings" aria-label="Close">✕</button>
-    </div>
-
-    <div class="settings-section">
-      <h4>Durations (minutes)</h4>
-      <div class="row"><label for="focusMin">Focus</label><input class="num" id="focusMin" type="number" min="1" value="25"></div>
-      <div class="row"><label for="shortMin">Short break</label><input class="num" id="shortMin" type="number" min="1" value="5"></div>
-      <div class="row"><label for="longMin">Long break</label><input class="num" id="longMin" type="number" min="1" value="15"></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="settings-section">
-      <h4>Behavior</h4>
-      <div class="row"><label><input class="check" id="autoBreak" type="checkbox"> Auto-start break</label></div>
-      <div class="row"><label><input class="check" id="autoFocus" type="checkbox"> Auto-start focus</label></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="settings-section">
-      <h4>Sounds</h4>
-      <div class="row"><label><input class="check" id="tick" type="checkbox" checked> Tick every second</label></div>
-      <div class="row"><label><input class="check" id="chime" type="checkbox" checked> End chime</label></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="settings-section">
-      <h4>Background</h4>
-      <div class="row" style="width:100%">
-        <input class="file" id="bgUpload" type="file" accept="image/*">
-      </div>
-      <button class="btn" style="margin-top:12px; width:100%" id="restore">Restore defaults</button>
-    </div>
-
-    <div class="note">Preferences saved locally in your browser.</div>
-  </aside>
-
-  <!-- Hint -->
-  <div class="bottom-hint">Space: Start/Pause • R: Reset • S: Skip</div>
-
+  
   <script src="script.js"></script>
 </body>
 </html>
