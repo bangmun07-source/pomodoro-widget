@@ -1,19 +1,19 @@
 :root{
-  --bg-dim: rgba(0,0,0,.35);
-  --glass: rgba(22,22,22,.82);
+  --bg-dim: rgba(0,0,0,.30);
+  --glass: rgba(22,22,22,.78);
   --stroke: rgba(255,255,255,.25);
+  --muted: rgba(255,255,255,.78);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0; color:#fff; font-family:'Inter',sans-serif;
-  background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop');
+  margin:0; color:#fff; font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   background-position:center; background-size:cover; background-attachment:fixed;
 }
 .bg-dim{position:fixed; inset:0; background:var(--bg-dim); pointer-events:none}
 
 /* Top bar */
-.topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px}
+.topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px;}
 .modes{display:flex; gap:8px}
 .pill{padding:8px 14px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.18); color:#fff; cursor:pointer; backdrop-filter: blur(10px); transition:.25s}
 .pill:hover{background:rgba(255,255,255,.28)}
@@ -23,9 +23,12 @@ body{
 
 /* Center */
 .center{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:80px 16px 24px}
-.time{font-size:clamp(64px,20vw,160px); line-height:.9; font-weight:700; color:#fff; text-shadow:0 6px 35px rgba(0,0,0,.45)}
+.time{
+  font-size:clamp(64px, 20vw, 180px); /* Responsive – mengikuti screen */
+  line-height:.9; font-weight:900; text-shadow:0 6px 35px rgba(0,0,0,.45); color:#fff;
+}
 .bar{width:min(1080px,92vw); height:12px; background:rgba(255,255,255,.22); border-radius:999px; overflow:hidden}
-.bar-fill{height:100%; width:0; background:rgba(255,255,255,.95);}
+.bar-fill{height:100%; width:0; background:rgba(255,255,255,.92);}
 .controls{display:flex; gap:10px}
 .btn{border:none; border-radius:999px; padding:10px 18px; font-weight:700; cursor:pointer}
 .btn.primary{background:#fff; color:#222}
@@ -39,9 +42,9 @@ body{
 .panel.open{right:0}
 .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
 .group{margin:16px 0}
-.group h3{font-size:.9rem; letter-spacing:.06em; text-transform:uppercase; opacity:.75; margin-bottom:8px}
+.group h3{font-size:.9rem; letter-spacing:.06em; text-transform:uppercase; opacity:.78; margin-bottom:8px}
 .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-label{display:flex; flex-direction:column; gap:6px; font-size:.92rem}
+label{display:flex; flex-direction:column; gap:6px; font-size:.94rem}
 input[type=number]{background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
 .row{display:flex; gap:10px; align-items:center}
 .select{width:100%; background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
@@ -49,9 +52,6 @@ input[type=number]{background:rgba(255,255,255,.1); border:1px solid var(--strok
 .preset{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:12px; border:1px solid var(--stroke); cursor:pointer}
 .upload{display:block; margin:10px 0}
 .note{opacity:.7; font-size:.8rem}
-
-/* Pusatkan tombol restore jika diinginkan */
-#btn-restore{display:block; margin:12px auto; border-radius:12px}
 
 @media (max-width:740px){
   .grid-3{grid-template-columns:1fr}
