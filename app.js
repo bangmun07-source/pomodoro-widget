@@ -1,163 +1,130 @@
-// ---------- Helpers ----------
+// ===== Utilities =====
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
-const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-const fmt = (t) => {
-  const m = String(Math.floor(t/60)).padStart(2,'0');
-  const s = String(Math.floor(t%60)).padStart(2,'0');
-  return `${m}:${s}`;
-};
+const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
+const fmt = (t)=>{ const m=String(Math.floor(t/60)).padStart(2,'0'); const s=String(Math.floor(t%60)).padStart(2,'0'); return `${m}:${s}` };
 
-// ---------- Elements ----------
-const timeEl   = $('#time');
-const barFill  = $('#bar-fill');
+// ===== Elements =====
+const timeEl = $('#time');
+const barFill = $('#bar-fill');
 const btnStart = $('#btn-start');
 const btnReset = $('#btn-reset');
-const btnSkip  = $('#btn-skip');
-const btnSettings = $('#btn-settings');
-const btnClose    = $('#btn-close');
+const btnSkip = $('#btn-skip');
 const panel = $('#panel');
+const btnSettings = $('#btn-settings');
+const btnClose = $('#btn-close');
 
-const btnModeP = $('#mode-pomo');
-const btnModeS = $('#mode-short');
-const btnModeL = $('#mode-long');
+// Modes
+const btnPomodoro = $('#btn-mode-pomodoro');
+const btnShort = $('#btn-mode-short');
+const btnLong = $('#btn-mode-long');
 
-const inPomo  = $('#in-pomo');
-const inShort = $('#in-short');
-const inLong  = $('#in-long');
-const inFont  = $('#in-font');
-
-const inUpload   = $('#in-upload');
+// Settings inputs
+const inPomo = $('#in-duration-pomo');
+const inShort = $('#in-duration-short');
+const inLong = $('#in-duration-long');
+const inFont = $('#in-font');
+const inUpload = $('#in-upload');
 const presetWrap = $('#preset-wrap');
 const btnRestore = $('#btn-restore');
 
-// ---------- State ----------
-const durations = { pomodoro: 25, short: 5, long: 15 };
-let mode = 'pomodoro';
-let remaining = durations[mode] * 60;
+// ===== Defaults =====
+const PRESETS = [
+  'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop', // mountains
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop', // ocean
+  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop', // city night
+  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop', // canyon
+  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920&auto=format&fit=crop'  // forest mist (baru, beda dari yang ganda)
+];
+
+const defaults = {
+  mode: 'pomodoro',
+  durations: { pomodoro: 25, short: 5, long: 15 },
+  font: "'Inter', sans-serif",
+  background: { type: 'preset', value: PRESETS[0] }
+};
+
+// ===== State =====
+let state = JSON.parse(localStorage.getItem('pd.state')||'null') || defaults;
 let running = false;
+let remaining = state.durations[state.mode]*60;
 
-// RAF-based timer
-let endTimeMs = null; // timestamp (ms) when the period ends
-let raf = null;
+// ===== Render helpers =====
+function applyBackground(){ document.body.style.backgroundImage = `url(${state.background?.value})`; }
+function applyFont(){ document.body.style.fontFamily = state.font; }
+function save(){ localStorage.setItem('pd.state', JSON.stringify(state)); }
 
-function startTimer() {
-  if (running) return;
-  running = true;
-  endTimeMs = performance.now() + remaining * 1000;
-  btnStart.textContent = 'Pause';
-  tick(); // kick
+function updateUI(){
+  timeEl.textContent = fmt(remaining);
+  const total = state.durations[state.mode]*60; const progress = Math.max(0, Math.min(1, 1 - remaining/total));
+  barFill.style.width = `${progress*100}%`;
+  [btnPomodoro,btnShort,btnLong].forEach(b=>b.classList.remove('active'));
+  ({pomodoro:btnPomodoro, short:btnShort, long:btnLong})[state.mode].classList.add('active');
+  inPomo.value = state.durations.pomodoro; inShort.value = state.durations.short; inLong.value = state.durations.long; inFont.value = state.font;
 }
 
-function pauseTimer() {
-  if (!running) return;
-  running = false;
-  cancelAnimationFrame(raf);
-  remaining = Math.max(0, (endTimeMs - performance.now()) / 1000);
-  btnStart.textContent = 'Start';
-  render();
+// ===== Timer (requestAnimationFrame) =====
+let raf, endAtMs;
+function startTimer(){
+  if (running) return; running = true; endAtMs = performance.now() + remaining*1000; btnStart.textContent='Pause'; tick();
 }
-
-function resetTimer() {
-  running = false;
-  cancelAnimationFrame(raf);
-  remaining = durations[mode] * 60;
-  btnStart.textContent = 'Start';
-  render();
+function pauseTimer(){
+  if (!running) return; running=false; cancelAnimationFrame(raf); remaining = Math.max(0, (endAtMs - performance.now())/1000); btnStart.textContent='Start'; updateUI();
 }
+function resetTimer(){ running=false; cancelAnimationFrame(raf); remaining = state.durations[state.mode]*60; btnStart.textContent='Start'; updateUI(); }
+function skipTimer(){ running=false; cancelAnimationFrame(raf); remaining = 0; updateUI(); }
 
-function skipTimer() {
-  running = false;
-  cancelAnimationFrame(raf);
-  remaining = 0;
-  render();
-}
-
-// RAF loop
-function tick(now = performance.now()) {
-  if (!running) return;
-  const left = (endTimeMs - now) / 1000;
-  remaining = Math.max(0, left);
-  render();
-
-  if (remaining <= 0) {
-    running = false;
-    btnStart.textContent = 'Start';
-    // (opsional) auto switch ke break/focus
-    return;
-  }
+function tick(now=performance.now()){
+  if (!running) return; remaining = Math.max(0, (endAtMs - now)/1000); updateUI();
+  if (remaining<=0){ running=false; btnStart.textContent='Start'; return; }
   raf = requestAnimationFrame(tick);
 }
 
-// ---------- UI ----------
-function render() {
-  timeEl.textContent = fmt(remaining);
-  const total = durations[mode] * 60;
-  const progress = Math.max(0, Math.min(1, 1 - remaining/total));
-  barFill.style.width = `${progress*100}%`;
-
-  [btnModeP, btnModeS, btnModeL].forEach(b=>b.classList.remove('active'));
-  ({pomodoro:btnModeP, short:btnModeS, long:btnModeL}[mode]).classList.add('active');
-}
-
-function setMode(next) {
-  mode = next;
-  running = false;
-  cancelAnimationFrame(raf);
-  remaining = durations[mode] * 60;
-  btnStart.textContent = 'Start';
-  render();
-}
-
-// ---------- Events ----------
-btnStart.addEventListener('click', () => running ? pauseTimer() : startTimer());
+// ===== Event bindings =====
+btnStart.addEventListener('click', ()=> running ? pauseTimer() : startTimer());
 btnReset.addEventListener('click', resetTimer);
 btnSkip .addEventListener('click', skipTimer);
 
-btnModeP.addEventListener('click', () => setMode('pomodoro'));
-btnModeS.addEventListener('click', () => setMode('short'));
-btnModeL.addEventListener('click', () => setMode('long'));
+btnPomodoro.addEventListener('click', ()=>{ state.mode='pomodoro'; resetTimer(); save(); });
+btnShort   .addEventListener('click', ()=>{ state.mode='short';    resetTimer(); save(); });
+btnLong    .addEventListener('click', ()=>{ state.mode='long';     resetTimer(); save(); });
 
-btnSettings.addEventListener('click', () => panel.classList.add('open'));
-btnClose.addEventListener('click', () => panel.classList.remove('open'));
+btnSettings.addEventListener('click', ()=> panel.classList.add('open'));
+btnClose   .addEventListener('click', ()=> panel.classList.remove('open'));
 
-[inPomo, inShort, inLong].forEach(input=>{
+;[inPomo,inShort,inLong].forEach((input)=>{
   input.addEventListener('input', ()=>{
-    durations.pomodoro = clamp(parseInt(inPomo.value||'0'),1,180);
-    durations.short    = clamp(parseInt(inShort.value||'0'),1,60);
-    durations.long     = clamp(parseInt(inLong.value||'0'),1,60);
-    remaining = durations[mode]*60;
-    render();
+    state.durations.pomodoro = clamp(parseInt(inPomo.value||'0'),1,180);
+    state.durations.short    = clamp(parseInt(inShort.value||'0'),1,60);
+    state.durations.long     = clamp(parseInt(inLong.value||'0'),1,60);
+    remaining = state.durations[state.mode]*60; save(); updateUI();
   });
 });
 
-inFont.addEventListener('change', ()=>{ document.body.style.fontFamily = inFont.value; });
+inFont.addEventListener('change', ()=>{ state.font = inFont.value; applyFont(); save(); });
 
-// Background presets
 presetWrap.querySelectorAll('.preset').forEach(img=>{
-  img.addEventListener('click', ()=>{ document.body.style.backgroundImage = `url(${img.src})`; });
+  img.addEventListener('click', ()=>{ state.background = {type:'preset', value: img.src}; applyBackground(); save(); });
 });
 
-// Upload custom background
 inUpload.addEventListener('change', (e)=>{
   const file = e.target.files?.[0]; if(!file) return;
   const reader = new FileReader();
-  reader.onload = ()=>{ document.body.style.backgroundImage = `url(${reader.result})`; };
+  reader.onload = ()=>{ state.background = {type:'upload', value: reader.result}; applyBackground(); save(); };
   reader.readAsDataURL(file);
 });
 
-// Restore default background
-btnRestore.addEventListener('click', ()=>{
-  document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop')";
-});
+btnRestore.addEventListener('click', ()=>{ state.background = { type:'preset', value: PRESETS[0] }; applyBackground(); save(); });
 
-// Keyboard shortcuts
+// Shortcuts
 window.addEventListener('keydown', (e)=>{
-  if (['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
-  if (e.code === 'Space'){ e.preventDefault(); running ? pauseTimer() : startTimer(); }
-  if (e.key.toLowerCase() === 'r'){ e.preventDefault(); resetTimer(); }
-  if (e.key.toLowerCase() === 's'){ e.preventDefault(); skipTimer(); }
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if (e.code==='Space'){ e.preventDefault(); running ? pauseTimer() : startTimer(); }
+  if (e.key.toLowerCase()==='r'){ e.preventDefault(); resetTimer(); }
+  if (e.key.toLowerCase()==='s'){ e.preventDefault(); skipTimer(); }
 });
 
-// First paint
-render();
+// ===== First paint =====
+applyFont(); if (!state.background?.value){ state.background = { type:'preset', value: PRESETS[0] }; }
+applyBackground(); updateUI(); btnStart.textContent = running? 'Pause' : 'Start';
+```
