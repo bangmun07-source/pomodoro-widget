@@ -10,32 +10,34 @@ body{
   margin:0; color:#fff; font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   background-position:center; background-size:cover; background-attachment:fixed;
 }
-.bg-dim{position:fixed; inset:0; background:var(--bg-dim); pointer-events:none}
+.bg-dim{position:fixed; inset:2; background:var(--bg-dim); pointer-events:none}
 
 /* Top bar */
-.topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px;}
+.topbar{position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px;}
 .modes{display:flex; gap:8px}
-.pill{padding:8px 14px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.18); color:#fff; cursor:pointer; backdrop-filter: blur(10px); transition:.25s}
-.pill:hover{background:rgba(255,255,255,.28)}
+.pill{padding:.02vw 1vw; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.18); color:#fff; font-size: 1vw;  cursor:pointer; backdrop-filter: blur(10px); transition:.25s}
+.pill:hover{opacity: 1;
+pointer-events: auto;background:rgba(255,255,255,.28)
+}
 .pill.active{background:#fff; color:#222; border-color:rgba(255,255,255,.8); box-shadow:0 4px 18px rgba(0,0,0,.15)}
-.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:999px; background:rgba(255,255,255,.18); border:1px solid var(--stroke); color:#fff; cursor:pointer; backdrop-filter: blur(10px);}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:999px; background:rgba(255,255,255,.18); border:1px solid var(--stroke); color:#fff; cursor:pointer; backdrop-filter: blur(10px);}
 .icon-btn:hover{background:rgba(255,255,255,.28)}
 
 /* Center */
 .center{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:80px 16px 24px}
 .time{
-  font-size:clamp(64px, 20vw, 180px); /* Responsive – mengikuti screen */
+  font-size:clamp(50px, 20vw, 100px); /* Responsive – mengikuti screen */
   line-height:.9; font-weight:900; text-shadow:0 6px 35px rgba(0,0,0,.45); color:#fff;
 }
-.bar{width:min(1080px,92vw); height:12px; background:rgba(255,255,255,.22); border-radius:999px; overflow:hidden}
+.bar{width:min(500vw,50vw); height:3px; background:rgba(255,255,255,.25); border-radius:999px; overflow:hidden}
 .bar-fill{height:100%; width:0; background:rgba(255,255,255,.92);}
 .controls{display:flex; gap:10px}
-.btn{border:none; border-radius:999px; padding:10px 18px; font-weight:700; cursor:pointer}
+.btn{border:none; border-radius:999px; padding:.2vw 3vw; font-weight:100; cursor:pointer; font-size: .5rem;}
 .btn.primary{background:#fff; color:#222}
 .btn.ghost{background:rgba(255,255,255,.75); color:#222}
-.btn.line{background:transparent; color:#fff; border:1px solid var(--stroke)}
-.btn.small{padding:6px 10px; font-size:.9rem}
-.hint{opacity:.85; font-size:.8rem}
+.btn.line{padding: 6px ; background:transparent; color:#fff; border:1px solid var(--stroke)}
+.btn.small{ padding:6px 10px; font-size:.9rem}
+.hint{opacity:.85; font-size:.8vw}
 
 /* Panel */
 .panel{position:fixed; top:0; right:-420px; width:min(420px,92vw); height:100vh; background:var(--glass); border-left:1px solid var(--stroke); backdrop-filter: blur(16px); color:#fff; padding:16px 16px 32px; transition:right .28s ease; overflow:auto;}
@@ -47,12 +49,14 @@ body{
 label{display:flex; flex-direction:column; gap:6px; font-size:.94rem}
 input[type=number]{background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
 .row{display:flex; gap:10px; align-items:center}
-.select{width:100%; background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#fff; border-radius:10px; padding:10px}
+.select{width:100%; background:rgba(255,255,255,.1); border:1px solid var(--stroke); color:#000; border-radius:10px; padding:10px}
 .preset-wrap{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
 .preset{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:12px; border:1px solid var(--stroke); cursor:pointer}
 .upload{display:block; margin:10px 0}
 .note{opacity:.7; font-size:.8rem}
 
 @media (max-width:740px){
-  .grid-3{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr}.tab-container button {
+        font-size: 4vw;
+    }
 }
